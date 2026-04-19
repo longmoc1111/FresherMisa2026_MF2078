@@ -2,6 +2,7 @@
 using FresherMisa2026.Application.Interfaces.Repositories;
 using FresherMisa2026.Entities.Department;
 using FresherMisa2026.Entities.Employee;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace FresherMisa2026.Infrastructure.Repositories
 {                                                   
     public class DepartmentRepo : BaseRepository<Department>, IDepartmentRepo
     {
-        public DepartmentRepo(IConfiguration configuration) : base(configuration)
+        public DepartmentRepo(IConfiguration configuration, IMemoryCache cache) : base(configuration, cache)
         {
         }
 
@@ -23,9 +24,12 @@ namespace FresherMisa2026.Infrastructure.Repositories
         /// <returns></returns>
         public  async Task<IEnumerable<Employee>> GetEmployeeByDepartmentCode(String code)
         {
-            var sql = $"select e.* from Employee e inner join Department d On e.DepartmentID = d.DepartmentID where d.DepartmentCode = @Code And e.IsDeleted = 0";
-            var res = await _dbConnection.QueryAsync<Employee>(sql, new {Code = code }); 
-            return res ; 
+           using(var conn = GetOpenConnection())
+            {
+                var sql = $"select e.* from Employee e inner join Department d On e.DepartmentID = d.DepartmentID where d.DepartmentCode = @Code And e.IsDeleted = 0";
+                var res = await conn.QueryAsync<Employee>(sql, new { Code = code });
+                return res;
+            }
         }
         /// <summary>
         /// đếm số lượng nhân vien theo mã phòng ban
@@ -35,9 +39,12 @@ namespace FresherMisa2026.Infrastructure.Repositories
         /// <exception cref="NotImplementedException"></exception>
         public async Task<int> GetCountEmployee(string code)
         {
-            var sql = $"select count(e.EmployeeID) from Employee e inner join Department d on e.DepartmentID = d.DepartmentID where d.DepartmentCode = @Code";
-            var count = await _dbConnection.ExecuteScalarAsync<int>(sql, new {Code = code });
-            return count;
+            using (var conn = GetOpenConnection())
+            {
+                var sql = $"select count(e.EmployeeID) from Employee e inner join Department d on e.DepartmentID = d.DepartmentID where d.DepartmentCode = @Code";
+                var count = await conn.ExecuteScalarAsync<int>(sql, new { Code = code });
+                return count;
+            }
         }
     }
 }

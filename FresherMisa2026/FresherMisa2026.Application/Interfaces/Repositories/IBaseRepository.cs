@@ -13,7 +13,7 @@ namespace FresherMisa2026.Application.Interfaces
         /// <param name="entityId">Id của bản ghi</param>
         /// <returns>Bản ghi thông tin 1 bản ghi</return
         /// CREATED BY: DVHAI (07/07/2026)
-        public Task<IEnumerable<BaseModel>> GetEntities();
+        public Task<IEnumerable<TEntity>> GetEntities();
 
         // <summary>
         ///  Lấy bản ghi theo id
