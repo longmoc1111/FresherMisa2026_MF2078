@@ -24,6 +24,8 @@ namespace FresherMisa2026.Entities.Employee
        
         [IRequired]  
         [Display(Name = "Mã nhân viên")]
+        [MISAFilter("EmployeeCode")]
+        [MISASearch("EmployeeCode")]
         public string? EmployeeCode { get; set; }
 
         /// <summary>
@@ -31,11 +33,15 @@ namespace FresherMisa2026.Entities.Employee
         /// </summary>
         [IRequired]  
         [Display(Name = "Tên Nhân viên")]
+        [MISAFilter("EmployeeCode")] 
+        [MISASearch("EmployeeName")]
+
         public string? EmployeeName { get; set; }
 
         /// <summary>
         /// Giới tính: 0-Nữ, 1-Nam, 2-Khác
         /// </summary>
+        [MISAFilter("Gender")]
         public int? Gender { get; set; }
 
         /// <summary>
@@ -63,6 +69,7 @@ namespace FresherMisa2026.Entities.Employee
         /// </summary>
         [IRequired]
         [Display(Name = "Phòng ban")]
+        [MISAFilter("DepartmentID")]
         public Guid? DepartmentID { get; set; }
 
         /// <summary>
@@ -70,12 +77,20 @@ namespace FresherMisa2026.Entities.Employee
         /// </summary>
         [IRequired]
         [Display(Name = "Vị trí")]
+        [MISAFilter("PositionID")]
         public Guid? PositionID { get; set; }
 
         /// <summary>
         /// Lương cơ bản
         /// </summary>
+        [MISAFilter("Salary")]
+
         public decimal? Salary { get; set; }
+        /// <summary>
+        /// Ngày vào làm
+        /// </summary>
+        [MISAFilter("HireDate")]
+        public DateTime? HireDate { get; set; }
 
     }
 }

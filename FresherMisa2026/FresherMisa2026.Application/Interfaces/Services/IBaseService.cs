@@ -46,7 +46,14 @@ namespace FresherMisa2026.Application.Interfaces.Services
         /// <returns>Số bản ghi bị ảnh hưởng</returns>
         /// CREATED BY: DVHAI (11/07/2026)
         Task<ServiceResponse> Update(Guid entityId, TEntity entity);
-
-       
+         /// <summary>
+         /// phân trang , lọc, tìm kiếm
+         /// </summary>
+         /// <param name="page"></param>
+         /// <param name="pageSize"></param>
+         /// <param name="search"></param>
+         /// <param name="filters"></param>
+         /// <returns></returns>
+        Task<PageResult<TEntity>> getPage(int page, int pageSize, string? search = null, List<FilterCondition>? filters = null);
     }
 }

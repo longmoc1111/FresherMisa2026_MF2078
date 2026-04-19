@@ -57,7 +57,17 @@ namespace FresherMisa2026.Application.Interfaces
         /// <returns></returns>
         Task<int> CheckDuplicate(object value, Guid id);
 
-       
+        /// <summary>
+        /// lọc, tìm kiếm, phân trang theo danh sách nhân viên
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="search"></param>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        Task<PageResult<TEntity>> GetPage(int  page, int pageSize, string search, List<FilterCondition>? filters = null );
+
+        
 
     }
 }

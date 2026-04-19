@@ -195,14 +195,17 @@ namespace FresherMisa2026.Application.Services
             return _serviceResult;
         }
          /// <summary>
-         /// 
+         ///   phân trang, lọc,tìm kiếm
          /// </summary>
          /// <param name="page"></param>
          /// <param name="pageSize"></param>
          /// <param name="search"></param>
          /// <param name="filters"></param>
          /// <returns></returns>
-        
+        public async Task<PageResult<TEntity>> getPage(int page, int pageSize, string? search = "", List<FilterCondition>? filters = null)
+        {
+            return await _baseRepository.GetPage(page, pageSize, search, filters);
+        }
 
         /// <summary>
         /// Cập nhập thông tin bản ghi 

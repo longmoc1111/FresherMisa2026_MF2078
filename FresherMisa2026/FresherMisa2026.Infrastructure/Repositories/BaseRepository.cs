@@ -247,6 +247,147 @@ namespace FresherMisa2026.Infrastructure.Repositories
             var count = await _dbConnection.ExecuteScalarAsync<int>(sql, new { Value = value, Id = id });
             return count;
         }
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="page"></param>
+       /// <param name="pageSize"></param>
+       /// <param name="search"></param>
+       /// <param name="filters"></param>
+       /// <returns></returns>
+       /// <exception cref="NotImplementedException"></exception>
+        public async Task<PageResult<TEntity>> GetPage(int page, int pageSize, string search, List<FilterCondition>? filters = null)
+        {
+            _dbConnection.Open();
+            using (var transaction = _dbConnection.BeginTransaction())
+            {
+                //lấy ra tableName cần lọc
+                var tableName = _modelType.GetTableName();
+                var sqlWhere = "";
+                //taoj list filter 
+                var listFilter = new List<string>();
+                //list các cột cần search
+                var listSearch = new List<string>();
+                //list param
+                var param = new DynamicParameters();
+                //lấy toàn bộ prop chứa nhãn MISAFilter
+                var allowedColumnName = typeof(TEntity).GetProperties()
+                    .Where(p => p.GetCustomAttribute<MISAFilter>() != null)
+                    .ToDictionary(p => p.Name, p => p.Name);
+
+                //lấy ra toàn bộ prop chứa nhãn MISAsearch
+                var allowerColumnSearch = typeof(TEntity).GetProperties()
+                   .Where(p => p.IsDefined(typeof(MISASearch), inherit: true))
+                   .Select(p => p.Name).ToList();
+
+                //lấy ra toàn bộ props 
+                if (filters != null)
+                {
+                    for (var i = 0; i < filters.Count; i++)
+                    {
+                        var filter = filters[i];
+                        //chuyển đổi dữ liệu đầu vào 
+                        object valueFilter = filter.value;
+                        if (valueFilter is JsonElement js)
+                        {
+                            //value kind cho biết dữ liệu đầu vào thuộc kiểu nào
+                            valueFilter = js.ValueKind switch
+                            {
+                                JsonValueKind.String => js.GetString(),
+                                JsonValueKind.Number => js.GetDecimal(),
+                                JsonValueKind.True or JsonValueKind.False => js.GetBoolean(),
+                                _ => js.ToString()
+                            };
+                        }
+
+                        //kiểm tra colum có tồn tại hay không
+                        if (allowedColumnName.TryGetValue(filter.ColumnName, out var realName))
+                        {
+                            string paramName = $"@filter{i}";
+
+                            var condition = "";
+                           if(filter.Operator != "" && !string.IsNullOrWhiteSpace(filter.Operator))
+                            {
+                                switch (filter.Operator)
+                                {
+                                    case "StartWith":
+                                        condition = $"{filter.ColumnName} like {paramName}";
+                                        valueFilter = $"{valueFilter}%";
+                                        break;
+                                    case "EndWith":
+                                        condition = $"{filter.ColumnName} like {paramName}";
+                                        valueFilter = $"%{valueFilter}";
+                                        break;
+                                    case "GreaterThan":
+                                        condition = $"{filter.ColumnName} > {paramName}";
+                                        valueFilter = $"{valueFilter}";
+                                        break;
+                                    case "LessThan":
+                                        condition = $"{filter.ColumnName} < {paramName}";
+                                        valueFilter = $"{valueFilter}";
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                condition = $"{filter.ColumnName} = {paramName}";
+                            }
+                                //thêm vào list filter
+                                listFilter.Add(condition);
+                            //thêm value vào list pram
+                            param.Add(paramName, valueFilter);
+
+                        }
+                    }
+
+                }
+                //xu ly phan search
+                foreach (var columnSearch in allowerColumnSearch)
+                {
+                    listSearch.Add($"{columnSearch} like @Search");
+                }
+                 
+                //list chưa cả 2 điều kiện filter và search
+                var allConditions = new List<string>();
+                //nếu mãng filter khác rỗng
+                if (listFilter.Count > 0) allConditions.AddRange(listFilter);
+                //nếu search đầu vào khác rỗng
+                if (search != "" && !string.IsNullOrWhiteSpace(search))
+                {
+                    var searchColumn = string.Join(" or ", listSearch);
+                    allConditions.Add($"(" + searchColumn + ")");
+                    param.Add("@Search", search);
+                }
+
+                //tạo câu truy vấn where
+                sqlWhere = allConditions.Count > 0 ? $"where {string.Join(" and ", allConditions)}" : "";
+
+                //tính offset
+                int offset = (page - 1) * pageSize;
+                //thêm vào param
+                param.Add("@Offset", offset);
+                param.Add("PageSize", pageSize);
+                //tạo câu truy vấn
+                var sql = $"select * from {tableName} {sqlWhere} limit @PageSize offset @Offset";
+                //lấy tổng ban ghi
+                var countSql = $"select count(*) from {tableName} {sqlWhere}";
+                //thực thi truy vấn
+                var data = await _dbConnection.QueryAsync<TEntity>(sql, param, transaction: transaction);
+                var count = await _dbConnection.ExecuteScalarAsync<int>(countSql, param, transaction: transaction);
+
+
+                return new PageResult<TEntity>
+                {
+                    PageIndex = page,
+                    PageSize = pageSize,
+                    Data = data,
+                    Total = count,
+                };
+            }
+
+
+        }
+
         /// <summary>
         /// Ánh xạ các thuộc tính sang kiểu dynamic
         /// </summary>

@@ -70,7 +70,7 @@ namespace FresherMisa2026.Application.Services
                 var propPhone = employee.GetType().GetProperty(phoneColumn);
                 var valuePhone = propPhone.GetValue(employee);
                 //kiểm tra đinh dạng email
-                if (valuePhone != null && !valuePhone.ToString().IsValidEmail())
+                if (valuePhone != null && !valuePhone.ToString().IsValidPhone())
                 {
                     errorMessage.Add("Số Điện thoại không đúng định dạng!");
                     isValid = false;

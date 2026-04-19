@@ -90,6 +90,17 @@ namespace FresherMisa2026.WebAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        /// <summary>
+        /// phân trang, lọc, tìm kiếm
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("filter")]
+        public async Task<ActionResult<ServiceResponse>> GetFilterPaging([FromBody] PagingRequest request)
+        {
+            var res = await _baseService.getPage(request.Page , request.PageSize, request.Search, request.Filters);
+            return Ok(res);
+        }
 
 
         /// <summary>
