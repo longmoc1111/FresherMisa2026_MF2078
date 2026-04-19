@@ -1,4 +1,4 @@
-using FresherMisa2026.Entities;
+﻿using FresherMisa2026.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,38 +7,21 @@ namespace FresherMisa2026.Application.Interfaces
 {
     public interface IBaseRepository<TEntity>
     {
-        /// <summary>
-        /// Lấy danh sách thực thể paging
-        /// </summary>
-        /// <param name="pageSize">Số bản ghi mỗi trang</param>
-        /// <param name="pageIndex">Chỉ số trang</param>
-        /// <param name="search">Từ khóa tìm kiếm</param>
-        /// <param name="searchFields">Danh sách trường tìm kiếm</param>
-        /// <param name="sort">Sắp xếp theo</param>
-        /// <returns>Tổng số bản ghi và danh sách dữ liệu</returns>
-        /// CREATED BY: DVHAI (07/07/2026)
-        Task<(long Total, 
-            IEnumerable<TEntity> Data)> GetFilterPagingAsync(
-            int pageSize, 
-            int pageIndex, 
-            string search, 
-            List<string> searchFields, 
-            string sort);
-
-        /// <summary>
-        /// Lấy danh sách thực thể
-        /// </summary>
-        /// <returns>Danh sách tất cả bản ghi</returns>
-        /// CREATED BY: DVHAI (07/07/2026)
-        Task<IEnumerable<BaseModel>> GetEntitiesAsync();
-
-        /// <summary>
-        /// Lấy bản ghi theo id
+        // <summary>
+        ///  Lấy danh sách thực thể
         /// </summary>
         /// <param name="entityId">Id của bản ghi</param>
-        /// <returns>Bản ghi tìm thấy hoặc null</returns>
+        /// <returns>Bản ghi thông tin 1 bản ghi</return
         /// CREATED BY: DVHAI (07/07/2026)
-        Task<TEntity> GetEntityByIDAsync(Guid entityId);
+        public Task<IEnumerable<BaseModel>> GetEntities();
+
+        // <summary>
+        ///  Lấy bản ghi theo id
+        /// </summary>
+        /// <param name="entityId">Id của bản ghi</param>
+        /// <returns>Bản ghi thông tin 1 bản ghi</return
+        /// CREATED BY: DVHAI (07/07/2026)
+        Task<TEntity> GetEntityByID(Guid entityId);
 
         /// <summary>
         /// Xóa bản ghi
@@ -46,15 +29,16 @@ namespace FresherMisa2026.Application.Interfaces
         /// <param name="entityId">Id của bản ghi</param>
         /// <returns>Số bản ghi bị xóa</returns>
         /// CREATED BY: DVHAI (07/07/2026)
-        Task<int> DeleteAsync(Guid entityId);
+        Task<int> Delete(Guid entityId);
+
 
         /// <summary>
         /// Thêm bản ghi
         /// </summary>
-        /// <param name="entity">Thông tin bản ghi</param>
-        /// <returns>Số bản ghi thêm mới</returns>
+        /// <param name="enitity">Thông tin bản ghi</param>
+        /// <returns>Số bản ghi</returns>
         /// CREATED BY: DVHAI (07/07/2026)
-        Task<int> InsertAsync(TEntity entity);
+        Task<int> Insert(TEntity enitity);
 
         /// <summary>
         /// Cập nhập thông tin bản ghi
@@ -63,6 +47,14 @@ namespace FresherMisa2026.Application.Interfaces
         /// <param name="entity">Thông tin bản ghi</param>
         /// <returns>Số bản ghi bị ảnh hưởng</returns>
         /// CREATED BY: DVHAI (07/07/2026)
-        Task<int> UpdateAsync(Guid entityId, TEntity entity);
+
+        Task<int> Update(Guid entityId, TEntity entity);
+        /// <summary>
+        /// hàm kiểm tra trùng
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
     }
 }

@@ -10,28 +10,10 @@ namespace FresherMisa2026.WebAPI.Controllers
     [ApiController]
     public class DepartmentsController : BaseController<Department>
     {
-        private readonly IDepartmentSerice _departmentSerice;
-
-        public DepartmentsController(
-            IDepartmentSerice departmentSerice) : base(departmentSerice)
+        IDepartmentService _IDepartmentService;
+        public DepartmentsController(IDepartmentService departmentService) : base(departmentService)
         {
-            _departmentSerice = departmentSerice;
-        }
-
-
-        /// <summary>
-        /// Lấy department theo code
-        /// </summary>
-        /// <returns></returns>
-        /// Created By: dvhai (10/04/2026)
-        [HttpGet("Code/{code}")]
-        public async Task<ActionResult<ServiceResponse>> GetByCode(string code)
-        {
-            var response = new ServiceResponse();
-            response.Data = await _departmentSerice.GetDepartmentByCodeAsync(code);
-            response.IsSuccess = true;
-
-            return response;
+            _IDepartmentService = departmentService;
         }
     }
 }

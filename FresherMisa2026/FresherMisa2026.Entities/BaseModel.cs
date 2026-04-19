@@ -4,11 +4,11 @@ using System.Text;
 
 namespace FresherMisa2026.Entities
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class IRequired : Attribute
-    {
+    //[AttributeUsage(AttributeTargets.Property)]
+    //public class IRequired : Attribute
+    //{
 
-    }
+    //}
 
     public class BaseModel
     {
@@ -20,7 +20,7 @@ namespace FresherMisa2026.Entities
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         
         /// <summary>
         /// Người sửa

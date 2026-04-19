@@ -1,4 +1,4 @@
-using FresherMisa2026.Application.Interfaces;
+﻿using FresherMisa2026.Application.Interfaces;
 using FresherMisa2026.Application.Interfaces.Repositories;
 using FresherMisa2026.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -16,11 +16,6 @@ namespace FresherMisa2026.Infrastructure
         {
             //base
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IPositionRepository, PositionRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
             return services;
         }
     }
