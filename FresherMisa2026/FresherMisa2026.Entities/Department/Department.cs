@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FresherMisa2026.Entities.Department
 {
-    [ConfigTable("Department", false, "DepartmentCode")]
+    [ConfigTable("Department", false, "DepartmentCode", codeColumn:"DepartmentCode")]
     public class Department : BaseModel
     {
         /// <summary>

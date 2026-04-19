@@ -387,6 +387,23 @@ namespace FresherMisa2026.Infrastructure.Repositories
 
 
         }
+          /// <summary>
+          /// lấy thông tin bản ghi thông qua mã code
+          /// </summary>
+          /// <param name="code"></param>
+          /// <returns></returns>
+        public async Task<int> GetEntityByCode(string code)
+        {
+            //lấy ra tên bảng 
+            var tableName = _modelType.GetTableName();
+            //lấy tên cột là mã code
+            var columnCode = _modelType.GetCodeColumn();
+            //tạo câu truy vấn
+            var sql = $"select count(*) from {tableName} where {columnCode} = @Code";
+            //thực thi câu truy vấn
+            var res = await _dbConnection.ExecuteScalarAsync<int>(sql, new { Code = code });
+            return res;
+        }                                
 
         /// <summary>
         /// Ánh xạ các thuộc tính sang kiểu dynamic

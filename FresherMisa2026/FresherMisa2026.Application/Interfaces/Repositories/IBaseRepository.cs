@@ -66,8 +66,12 @@ namespace FresherMisa2026.Application.Interfaces
         /// <param name="filters"></param>
         /// <returns></returns>
         Task<PageResult<TEntity>> GetPage(int  page, int pageSize, string search, List<FilterCondition>? filters = null );
-
-        
+         /// <summary>
+         /// lấy thông tin ban ghi thông qua mã code
+         /// </summary>
+         /// <param name="code"></param>
+         /// <returns></returns>
+        Task<int> GetEntityByCode(string code);
 
     }
 }

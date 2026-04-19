@@ -15,5 +15,27 @@ namespace FresherMisa2026.WebAPI.Controllers
         {
             _IDepartmentService = departmentService;
         }
+         /// <summary>
+         ///  l?y danh sách nhân viên theo mã phòng ban
+         /// </summary>
+         /// <param name="code"></param>
+         /// <returns></returns>
+        [HttpGet("{code}/employees")]
+        public async Task<ServiceResponse> getEmployeeByDepartmentCode(string code)
+        {
+            var res = await _IDepartmentService.GetEmployeeByDepartmentCode(code);
+            return res;
+        }
+        /// <summary>
+        /// l?y s? l??ng nhân viên thông qua mã phòng ban
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet("{code}/employee-count")]
+        public async Task<ServiceResponse> GetEmployeeCount(string code)
+        {
+            var response = await _IDepartmentService.GetElementCount(code);
+            return response;
+        }
     }
 }
