@@ -182,11 +182,21 @@ namespace FresherMisa2026.Application.Services
             //2. Sử lí lỗi tương ứng
             if (isValid)
             {
-                _serviceResult.Data = await _baseRepository.Insert(entity);
-                _serviceResult.Code = (int)ResponseCode.Success;
+                try
+                {
+                    _serviceResult.Data = await _baseRepository.Insert(entity);
+                    _serviceResult.Code = (int)ResponseCode.Success;
+                    _serviceResult.IsSuccess = true;
+                }
+                catch (Exception ex) {
+                    _serviceResult.IsSuccess = false;
+                    _serviceResult.Code = (int)ResponseCode.BadRequest;
+                    _serviceResult.UserMessage = ex.Message;
+                }
             }
             else
             {
+                _serviceResult.IsSuccess = false;
                 _serviceResult.Code = (int)ResponseCode.BadRequest;
                 _serviceResult.DevMessage = "Validate thất bại";
             }

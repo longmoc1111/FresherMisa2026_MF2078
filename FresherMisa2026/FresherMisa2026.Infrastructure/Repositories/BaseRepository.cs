@@ -201,9 +201,19 @@ namespace FresherMisa2026.Infrastructure.Repositories
                     ClearCache();
                     transaction.Commit();
                 }
-                catch
+                catch(MySqlException ex)
                 {
                     transaction.Rollback();
+                    if(ex.Number == 1062 || ex.Number == 1644 || ex.Number == 1213)
+                    {
+                        throw new Exception("Mã nhân viên đã tồn tại!");
+                    }
+                    throw;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
                 }
             }
 
