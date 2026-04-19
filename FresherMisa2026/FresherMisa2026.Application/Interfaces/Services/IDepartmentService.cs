@@ -9,5 +9,6 @@ namespace FresherMisa2026.Application.Interfaces.Services
 {
     public interface IDepartmentService :IBaseService<Department>
     {
+
     }
 }

@@ -16,6 +16,13 @@ namespace FresherMisa2026.Infrastructure
         {
             //base
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            //department
+            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
+            //employee
+            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+            //positon
+            services.AddScoped<IPositionRepo, PositionRepo>();
+
             return services;
         }
     }

@@ -14,6 +14,13 @@ namespace FresherMisa2026.Application
         {
             //base
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
+            //department
+            services.AddScoped<IDepartmentService, DepartmentService>();
+            //employee
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            //position
+            services.AddScoped<IPositionService, PositionService>();    
+
             return services;
         }
     }
