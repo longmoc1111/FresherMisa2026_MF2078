@@ -232,17 +232,21 @@ namespace FresherMisa2026.Infrastructure.Repositories
             //4. Trả về dữ liệu
             return rowAffects;
         } 
-          
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="page"></param>
-       /// <param name="pageSize"></param>
-       /// <param name="search"></param>
-       /// <param name="filters"></param>
-       /// <returns></returns>
-       /// <exception cref="NotImplementedException"></exception>
-
+          /// <summary>
+          /// hàm check trùng lặp
+          /// </summary>
+          /// <param name="value"></param>
+          /// <param name="id"></param>
+          /// <returns></returns>
+        public async Task<int> CheckDuplicate(object value , Guid id)
+        {
+            var keyName = _modelType.GetKeyName();
+            var tableName = _modelType.GetTableName();
+            var columnUnique = _modelType.GetUnique();
+            var sql = $"select count(1) from {tableName} where {columnUnique} = @Value And {keyName} <> @Id";
+            var count = await _dbConnection.ExecuteScalarAsync<int>(sql, new { Value = value, Id = id });
+            return count;
+        }
         /// <summary>
         /// Ánh xạ các thuộc tính sang kiểu dynamic
         /// </summary>

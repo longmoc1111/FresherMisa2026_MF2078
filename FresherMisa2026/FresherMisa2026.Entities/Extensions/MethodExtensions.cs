@@ -96,5 +96,48 @@ namespace FresherMisa2026.Entities.Extensions
 
             return key.Name;
         }
+
+        //public static MISARequired GetIReqired(this PropertyInfo prop)
+        //{
+        //    return prop.GetCustomAttribute<MISARequired>();
+        //}
+
+        public static string GetUnique(this Type type)
+        {
+            var configtable = GetConfigTable(type);
+            return configtable.UniqueColumns;
+        }
+
+        public static string GetEmail(this Type type)
+        {
+            var configtable = GetConfigTable(type);
+            return configtable.Email;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetPhone(this Type type)
+        {
+            var configtable = GetConfigTable(type);
+            return configtable.Phone;
+        }
+        /// <summary>
+        /// lấy ra ngày sinh 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetDate(this Type type)
+        {
+            var configtable = GetConfigTable(type);
+            return configtable.Date;
+        }
+       
+        public static string GetCodeColumn(this Type type)
+        {
+            var configtable = GetConfigTable(type);
+            return configtable.CodeColumn;
+        }
     }
 }

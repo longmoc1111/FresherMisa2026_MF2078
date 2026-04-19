@@ -9,7 +9,7 @@ namespace FresherMisa2026.Entities.Employee
     /// <summary>
     /// Thực thể Nhân viên
     /// </summary>
-    [ConfigTable("employee", false,  uniqueColumns: "EmployeeCode")]
+    [ConfigTable("employee", false,  uniqueColumns: "EmployeeCode", email:"Email", phone: "PhoneNumber" , date: "DateOfBirth")]
     public class Employee : BaseModel
     {
         /// <summary>
@@ -22,12 +22,15 @@ namespace FresherMisa2026.Entities.Employee
         /// Mã nhân viên
         /// </summary>
        
+        [IRequired]  
+        [Display(Name = "Mã nhân viên")]
         public string? EmployeeCode { get; set; }
 
         /// <summary>
         /// Tên nhân viên
         /// </summary>
-
+        [IRequired]  
+        [Display(Name = "Tên Nhân viên")]
         public string? EmployeeName { get; set; }
 
         /// <summary>
@@ -58,11 +61,15 @@ namespace FresherMisa2026.Entities.Employee
         /// <summary>
         /// ID Phòng ban
         /// </summary>
+        [IRequired]
+        [Display(Name = "Phòng ban")]
         public Guid? DepartmentID { get; set; }
 
         /// <summary>
         /// ID Chức vụ
         /// </summary>
+        [IRequired]
+        [Display(Name = "Vị trí")]
         public Guid? PositionID { get; set; }
 
         /// <summary>

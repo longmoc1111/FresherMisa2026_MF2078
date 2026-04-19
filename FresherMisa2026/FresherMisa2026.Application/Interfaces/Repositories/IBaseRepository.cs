@@ -55,6 +55,9 @@ namespace FresherMisa2026.Application.Interfaces
         /// <param name="value"></param>
         /// <param name="id"></param>
         /// <returns></returns>
+        Task<int> CheckDuplicate(object value, Guid id);
+
+       
 
     }
 }
