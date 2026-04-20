@@ -206,7 +206,7 @@ namespace FresherMisa2026.Infrastructure.Repositories
                     transaction.Rollback();
                     if(ex.Number == 1062 || ex.Number == 1644 || ex.Number == 1213)
                     {
-                        throw new Exception("Mã nhân viên đã tồn tại!");
+                        throw new Exception(ex.Message);
                     }
                     throw;
                 }
@@ -404,7 +404,15 @@ namespace FresherMisa2026.Infrastructure.Repositories
                 //thực thi truy vấn
                 var data = await conn.QueryAsync<TEntity>(sql, param, transaction: transaction);
                 var count = await conn.ExecuteScalarAsync<int>(countSql, param, transaction: transaction);
-               
+
+                // 2. Dừng đồng hồ ngay sau khi lấy xong dữ liệu
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
+
+                // In ra console để xem
+                Console.WriteLine($"Thời gian truy vấn SQL: {elapsedMs}ms"); 
+
                 transaction.Commit();
 
                 return new PageResult<TEntity>
